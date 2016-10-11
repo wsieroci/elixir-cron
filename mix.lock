@@ -1,0 +1,2 @@
+%{"httpotion": {:hex, :httpotion, "3.0.2"},
+  "ibrowse": {:hex, :ibrowse, "4.2.2"}}
