@@ -11,6 +11,10 @@ defmodule Cron.WebsiteChecker do
     GenServer.call(server, {:lookup})
   end
 
+  def set(server, value) do
+    GenServer.call(server, {:set, value})
+  end
+
   ## Server:
 
   def init({:ok, website}) do
@@ -18,8 +22,17 @@ defmodule Cron.WebsiteChecker do
     {:ok, %{time: 0, website: website}}
   end
 
-  def handle_call({:lookup}, _from, %{time: time, _: _} = state) do
+  def code_change(old_version, state, extra) do
+    IO.puts "New version. Moving out of #{old_version}"
+    {:ok, state}
+  end
+
+  def handle_call({:lookup}, _from, %{time: time} = state) do
     {:reply, time, state}
+  end
+
+  def handle_call({:set, value}, _from, state) do
+    {:reply, state, %{state | time: value}}
   end
 
   def handle_info(:work, %{time: time, website: website}) do
@@ -35,6 +48,6 @@ defmodule Cron.WebsiteChecker do
   defp check_website(time, website) do
     response = HTTPotion.get website
     is_success = HTTPotion.Response.success?(response)
-    IO.puts "Checking website #{website}. Time: #{time}. Success: #{is_success}"
+    IO.puts "Checking website hotter #{website}. Time: #{time}. Success: #{is_success}"
   end
 end
