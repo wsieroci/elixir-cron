@@ -14,7 +14,20 @@ Cron.WebsiteChecker.set(:simple_checker, 101)
 
 ## Code reloading
 
-:sys.suspend(:simple_checker)
-c "lib/cron/website_checker.ex"
-:sys.change_code(:simple_checker, Cron.WebsiteChecker, "https://www.polidea.com", [:param])
-:sys.resume(:simple_checker) 
+* :sys.suspend(:simple_checker)
+* c "lib/cron/website_checker.ex"
+* :sys.change_code(:simple_checker, Cron.WebsiteChecker, "https://www.polidea.com", [:param])
+* :sys.resume(:simple_checker) 
+
+## Many nodes
+
+* iex --sname node1
+* iex --sname node2
+* iex --sname node3
+
+* Node.connect :"node2@Wiktors-MacBook-Pro-2"
+* Node.connect :"node3@Wiktors-MacBook-Pro-2"
+
+* Node.list
+* :rpc.multicall(:inets, :start, [])
+* :rpc.multicall(:httpc, :request, ['http://api.icndb.com/jokes/random'])
